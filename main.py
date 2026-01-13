@@ -10,6 +10,25 @@ token = os.getenv('DISCORD_TOKEN')
 
 handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
 intents = discord.Intents.default()
-intents.messages_content = True
+intents.message_content = True
 intents.members = True
 
+bot = commands.Bot(command_prefix='!', intents=intents)
+
+@bot.event
+async def on_ready(message):
+    print(f'Logged in as {bot.user} (ID: {bot.user.id})')
+    await message.channel.send("Mert is the best!")
+    print('------')
+
+
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+    if "mert" in message.content.lower():
+        await message.channel.send("Mert is the best!")
+
+
+
+bot.run(token, log_handler=handler, log_level=logging.DEBUG)
